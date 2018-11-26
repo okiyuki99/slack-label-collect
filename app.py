@@ -13,7 +13,7 @@ def hello():
     }
     headers = {'Content-Type': 'application/json'}
     requests.post(URL, data=json.dumps(payload), headers=headers)
-    return 0
+    return 'OK'
     #data = json.load(request.data)
     #payload = {
     #    "response_type": "ephemeral",
