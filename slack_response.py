@@ -5,7 +5,7 @@ import requests
 
 app = Flask(__name__)
 
-@app.route("/", methods=['POST'])
+@app.route("/slack", methods=['POST'])
 def hello():
     URL = 'https://hooks.slack.com/services/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'
     payload = {
