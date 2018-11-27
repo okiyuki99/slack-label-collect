@@ -17,8 +17,9 @@ def post():
     value = form_json["actions"][0]["value"]
     ts = form_json["message_ts"]
 
-    URL = 'https://hooks.slack.com/services/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'
- 
+    #URL = 'https://hooks.slack.com/services/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'
+    URL = 'https://hooks.slack.com/services/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' 
+
     if value == "anomaly" :
         text = "異常ラベルが記録されました"
     elif value == "normal" :
