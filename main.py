@@ -54,9 +54,6 @@ def slack_reply():
     value = form_json["actions"][0]["value"]
     ts = form_json["message_ts"]
 
-    #URL = 'https://hooks.slack.com/services/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'
-    #URL = 'https://hooks.slack.com/services/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' 
-
     if value == "anomaly" :
         text = "`異常`ラベルが記録されました"
     elif value == "normal" :
@@ -64,22 +61,12 @@ def slack_reply():
     else :
         text = "`unknown`が記録されました"
 
-    #payload = {
-    #    "text": text,
-    #    "username": "Anomaly Response",
-    #    "thread_ts": ts,
-    #    "reply_broadcast": False
-    #}
-    #headers = {'Content-Type': 'application/json'}
-    #requests.post(URL, data=json.dumps(payload), headers=headers)
-
     slack_client.api_call(
         "chat.postMessage",
         channel = "#anomaly_label",
         text = text,
         thread_ts = ts,
         reply_broadcast = False
-        #attachments=[]
     )
 
     return make_response("", 200)
