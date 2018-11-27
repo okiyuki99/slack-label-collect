@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,request,make_response
 import os
 import json
 import requests
@@ -14,7 +14,7 @@ def post():
     }
     headers = {'Content-Type': 'application/json'}
     requests.post(URL, data=json.dumps(payload), headers=headers)
-    return 'OK'
+    return make_response("", 200)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
