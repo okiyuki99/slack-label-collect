@@ -3,7 +3,7 @@ Collect anomaly label data through posting interective message in slack
 
 ## Image 
 
-準備中
+![image][doc/image.png]
 
 ## How to deploy
 
