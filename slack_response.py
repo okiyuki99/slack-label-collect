@@ -6,7 +6,7 @@ import requests
 
 # Your app's Slack bot user token
 SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
-SLACK_VERIFICATION_TOKEN = os.environ.get("SLACK_VERIFI")
+SLACK_VERIFICATION_TOKEN = os.environ.get("SLACK_VERTIFICATION_TOKEN")
 
 # Slack client for Web API requests
 slack_client = SlackClient(SLACK_BOT_TOKEN)
@@ -37,7 +37,7 @@ button_message_payload = [
 app = Flask(__name__)
 
 @app.route("/post", methods=["GET"])
-def index():
+def post_button_message():
     slack_client.api_call(
         "chat.postMessage",
         channel = "#anomaly_label",
@@ -47,7 +47,7 @@ def index():
     return make_response("", 200)
 
 @app.route("/slack", methods=['POST'])
-def post():
+def slack_reply():
 
     # Parse the request payload
     form_json = json.loads(request.form["payload"])
@@ -55,23 +55,33 @@ def post():
     ts = form_json["message_ts"]
 
     #URL = 'https://hooks.slack.com/services/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'
-    URL = 'https://hooks.slack.com/services/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' 
+    #URL = 'https://hooks.slack.com/services/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' 
 
     if value == "anomaly" :
         text = "`異常`ラベルが記録されました"
     elif value == "normal" :
         text = "`正常`ラベルが記録されました"
     else :
-        text = "unknownが記録されました"
+        text = "`unknown`が記録されました"
 
-    payload = {
-        "text": text,
-        "username": "Anomaly Response",
-        "thread_ts": ts,
-        "reply_broadcast": False
-    }
-    headers = {'Content-Type': 'application/json'}
-    requests.post(URL, data=json.dumps(payload), headers=headers)
+    #payload = {
+    #    "text": text,
+    #    "username": "Anomaly Response",
+    #    "thread_ts": ts,
+    #    "reply_broadcast": False
+    #}
+    #headers = {'Content-Type': 'application/json'}
+    #requests.post(URL, data=json.dumps(payload), headers=headers)
+
+    slack_client.api_call(
+        "chat.postMessage",
+        channel = "#anomaly_label",
+        text = text,
+        thread_ts = ts,
+        reply_broadcast = False
+        #attachments=[]
+    )
+
     return make_response("", 200)
 
 if __name__ == "__main__":
