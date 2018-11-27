@@ -1,12 +1,53 @@
 from flask import Flask, request, make_response
+from slackclient import SlackClient
 import os
 import json
 import requests
 
+# Your app's Slack bot user token
+SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
+SLACK_VERIFICATION_TOKEN = os.environ.get("SLACK_VERIFI")
+
+# Slack client for Web API requests
+slack_client = SlackClient(SLACK_BOT_TOKEN)
+
+# Define Payload
+button_message_payload = {
+    'attachments': [
+        {
+            'attachment_type': "default",
+            'callback_id': 'anomaly_label',
+            'fallback': 'Interactive message for creating anomaly label',
+            #'pretext': '異常/正常だと判定できるなら、以下のボタンを押してください',
+            "actions": [
+                {
+                    "name": "anomaly",
+                    "text": "異常",
+                    "type": "button",
+                    "value": "anomaly"
+                },
+                {
+                    "name": "normal",
+                    "text": "正常",
+                    "type": "button",
+                    "value": "normal"
+                }
+            ]
+        }
+    ],
+    "username": "Anomaly Labeller"
+}
+
 app = Flask(__name__)
 
-@app.route("/", methods=["GET"])
+@app.route("/post", methods=["GET"])
 def index():
+    slack_client.api_call(
+        "chat.postMessage",
+        channel = "#anomaly_label",
+        text = '異常/正常だと判定できるなら、以下のボタンを押してください',
+        attachments = button_message_payload
+    )
     return make_response("", 200)
 
 @app.route("/slack", methods=['POST'])
