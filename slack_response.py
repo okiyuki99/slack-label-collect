@@ -12,31 +12,27 @@ SLACK_VERIFICATION_TOKEN = os.environ.get("SLACK_VERIFI")
 slack_client = SlackClient(SLACK_BOT_TOKEN)
 
 # Define Payload
-button_message_payload = {
-    'attachments': [
-        {
-            'attachment_type': "default",
-            'callback_id': 'anomaly_label',
-            'fallback': 'Interactive message for creating anomaly label',
-            #'pretext': '異常/正常だと判定できるなら、以下のボタンを押してください',
-            "actions": [
-                {
-                    "name": "anomaly",
-                    "text": "異常",
-                    "type": "button",
-                    "value": "anomaly"
-                },
-                {
-                    "name": "normal",
-                    "text": "正常",
-                    "type": "button",
-                    "value": "normal"
-                }
-            ]
-        }
-    ],
-    "username": "Anomaly Labeller"
-}
+button_message_payload = [
+    {
+        'attachment_type': "default",
+        'callback_id': 'anomaly_label',
+        'fallback': 'Interactive message for creating anomaly label',
+        "actions": [
+            {
+                "name": "anomaly",
+                "text": "異常",
+                "type": "button",
+                "value": "anomaly"
+            },
+            {
+                "name": "normal",
+                "text": "正常",
+                "type": "button",
+                "value": "normal"
+            }
+        ]
+    }
+]
 
 app = Flask(__name__)
 
@@ -45,7 +41,7 @@ def index():
     slack_client.api_call(
         "chat.postMessage",
         channel = "#anomaly_label",
-        text = '異常/正常だと判定できるなら、以下のボタンを押してください',
+        text = '以下のボタンを押してラベル付けしてね',
         attachments = button_message_payload
     )
     return make_response("", 200)
@@ -62,9 +58,9 @@ def post():
     URL = 'https://hooks.slack.com/services/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' 
 
     if value == "anomaly" :
-        text = "異常ラベルが記録されました"
+        text = "`異常`ラベルが記録されました"
     elif value == "normal" :
-        text = "正常ラベルが記録されました"
+        text = "`正常`ラベルが記録されました"
     else :
         text = "unknownが記録されました"
 
